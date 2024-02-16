@@ -1,0 +1,20 @@
+body {
+  background-color: #090e16;
+  color: white;
+}
+
+.fade-out-image {
+  display: block;
+  position: relative;
+}
+
+.fade-out-image:before {
+  background: linear-gradient(180deg, hsla(0, 0%, 100%, 0), #090e16);
+  bottom: -1px;
+  content: "";
+  height: 50%;
+  left: -1px;
+  position: absolute;
+  width: calc(100% + 2px);
+  z-index: 1;
+}
