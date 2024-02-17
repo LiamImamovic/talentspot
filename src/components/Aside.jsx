@@ -8,7 +8,7 @@ const Aside = () => {
   };
 
   return (
-    <div>
+    <div className="">
       <div
         className={`lg:hidden ${
           sidebarVisible
@@ -16,8 +16,39 @@ const Aside = () => {
             : ""
         }`}
       >
+        <div
+          className={`lg:block ml-4 mt-4 bg-white lg:hidden rounded-lg opacity-80 ${
+            sidebarVisible ? "hidden" : "block"
+          } `}
+        >
+          <button
+            className="px-4 py-2 text-gray-500 focus:outline-none"
+            onClick={toggleSidebar}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4 6h16M4 12h16m-7 6h7"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <aside
+        className={`${
+          sidebarVisible ? "block" : "hidden"
+        } lg:flex lg:flex-col w-64 h-screen px-5 py-4 overflow-y-auto border-r rtl:border-r-0 rtl:border-l bg-bg-primary border-gray-700`}
+      >
         <button
-          className="px-4 py-2 text-gray-500 focus:outline-none"
+          className="text-gray-500 focus:outline-none lg:hidden"
           onClick={toggleSidebar}
         >
           <svg
@@ -30,17 +61,10 @@ const Aside = () => {
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              d="M4 6h16M4 12h16m-7 6h7"
+              d="M6 18L18 6M6 6l12 12"
             />
           </svg>
         </button>
-      </div>
-
-      <aside
-        className={`${
-          sidebarVisible ? "block" : "hidden"
-        } lg:flex lg:flex-col w-64 h-screen px-5 py-4 overflow-y-auto border-r rtl:border-r-0 rtl:border-l bg-bg-primary border-gray-700`}
-      >
         <div className="flex flex-col justify-between flex-1 mt-2">
           <nav className="-mx-3 space-y-6">
             <div className="space-y-3">
