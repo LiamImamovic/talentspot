@@ -3,6 +3,22 @@ import Footer from "../components/Footer";
 import Aside from "../components/Aside";
 import { useState } from "react";
 
+// eslint-disable-next-line react/prop-types
+const InputField = ({ label, value, onChange, placeholder }) => (
+  <div className="grid grid-cols-2 border-b border-white">
+    <div className="px-4 py-2 font-bold">{label}</div>
+    <div className="px-4 py-2">
+      <input
+        type="text"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className="bg-gray-600 px-2 py-1 rounded-md w-full"
+      />
+    </div>
+  </div>
+);
+
 const Profile = () => {
   const [initialUserInfo, setInitialUserInfo] = useState({
     firstName: "John",
@@ -17,35 +33,44 @@ const Profile = () => {
     level: "Nationale 3",
     club: "Andernos Sport FC",
     highlight: "Youtube URL",
+    seasons: [
+      { season: "2022-2023", club: "USLCF" },
+      { season: "2021-2022", club: "Union College" },
+      { season: "2020-2021", club: "Union College" },
+      { season: "2019-2020", club: "USLCF" },
+      { season: "2018-2019", club: "FCEMA/USLCF" },
+    ],
   });
 
   const [userInfo, setUserInfo] = useState({ ...initialUserInfo });
   const [isModified, setIsModified] = useState(false);
 
-  const handleChange = (field, value) => {
-    setUserInfo((prevInfo) => ({
-      ...prevInfo,
-      [field]: value,
-    }));
+  const handleChange = (field, value, index) => {
+    if (field === "season" || field === "club") {
+      const updatedSeasons = [...userInfo.seasons];
+      updatedSeasons[index][field] = value;
+      setUserInfo((prevInfo) => ({
+        ...prevInfo,
+        seasons: updatedSeasons,
+      }));
+    } else {
+      setUserInfo((prevInfo) => ({
+        ...prevInfo,
+        [field]: value,
+      }));
+    }
     setIsModified(true);
   };
 
   const handleSave = () => {
-    // Perform save action (update user info, API call, etc.)
-    // For now, let's just log the updated user info
     console.log("Saving changes:", userInfo);
-
-    // Reset isModified state
     setIsModified(false);
-
-    // You can also reset initialUserInfo if needed
     setInitialUserInfo({ ...userInfo });
   };
 
   const handleCancel = () => {
-    // Reset userInfo to initial state on cancel
     setUserInfo({ ...initialUserInfo });
-    setIsModified(false); // Reset isModified state
+    setIsModified(false);
   };
 
   return (
@@ -59,166 +84,107 @@ const Profile = () => {
               Profile
             </h1>
 
-            <div className="mt-6  pb-6 w-full h-full bg-gradient-to-r from-green-900 to-green-700 rounded-md shadow-lg">
-              <div className="w-full h-1/6 rounded-t-md bg-gradient-to-r from-green-700 to-green-500 flex items-center p-4">
-                <div className="rounded-full w-20 h-20 bg-white border-4 border-green-900"></div>
+            <div className="mt-6  pb-6 w-full h-full bg-gray-900 rounded-md shadow-lg">
+              <div className="w-full h-1/6 rounded-t-md bg-gray-700 flex items-center p-4">
+                <div className="rounded-full w-20 h-20 bg-white border-4 border-gray-900"></div>
                 <div className="ml-4">
                   <h3 className="text-xl font-bold text-white">Doe</h3>
-                  <h4 className="text-lg text-green-200">John</h4>
+                  <h4 className="text-lg text-gray-200">John</h4>
                 </div>
               </div>
               <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-y-8 p-6">
-                <div className="grid grid-cols-2 border-b border-white">
-                  <div className="px-4 py-2 font-bold">Prénom</div>
-                  <div className="px-4 py-2">
-                    <input
-                      type="text"
-                      value={userInfo.firstName}
-                      onChange={(e) =>
-                        handleChange("firstName", e.target.value)
-                      }
-                      className="bg-green-400 px-2 py-1 rounded-md w-full"
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 border-b border-white">
-                  <div className="px-4 py-2 font-bold">Nom</div>
-                  <div className="px-4 py-2">
-                    <input
-                      type="text"
-                      value={userInfo.lastName}
-                      onChange={(e) => handleChange("lastName", e.target.value)}
-                      className="bg-green-400 px-2 py-1 rounded-md w-full"
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 border-b border-white">
-                  <div className="px-4 py-2 font-bold">Email</div>
-                  <div className="px-4 py-2">
-                    <input
-                      type="text"
-                      value={userInfo.email}
-                      onChange={(e) => handleChange("email", e.target.value)}
-                      className="bg-green-400 px-2 py-1 rounded-md w-full"
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 border-b border-white">
-                  <div className="px-4 py-2 font-bold">Genre</div>
-                  <div className="px-4 py-2">
-                    <input
-                      type="text"
-                      value={userInfo.gender}
-                      onChange={(e) => handleChange("gender", e.target.value)}
-                      className="bg-green-400 px-2 py-1 rounded-md w-full"
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 border-b border-white">
-                  <div className="px-4 py-2 font-bold">Date de naissance</div>
-                  <div className="px-4 py-2">
-                    <input
-                      type="text"
-                      value={userInfo.birthDate}
-                      onChange={(e) =>
-                        handleChange("birthDate", e.target.value)
-                      }
-                      className="bg-green-400 px-2 py-1 rounded-md w-full"
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 border-b border-white">
-                  <div className="px-4 py-2 font-bold">Taille</div>
-                  <div className="px-4 py-2">
-                    <input
-                      type="text"
-                      value={userInfo.height}
-                      onChange={(e) => handleChange("height", e.target.value)}
-                      className="bg-green-400 px-2 py-1 rounded-md w-full"
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 border-b border-white">
-                  <div className="px-4 py-2 font-bold">Ville</div>
-                  <div className="px-4 py-2">
-                    <input
-                      type="text"
-                      value={userInfo.city}
-                      onChange={(e) => handleChange("city", e.target.value)}
-                      className="bg-green-400 px-2 py-1 rounded-md w-full"
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 border-b border-white">
-                  <div className="px-4 py-2 font-bold">Poste</div>
-                  <div className="px-4 py-2">
-                    <input
-                      type="text"
-                      value={userInfo.position}
-                      onChange={(e) => handleChange("position", e.target.value)}
-                      className="bg-green-400 px-2 py-1 rounded-md w-full"
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 border-b border-white">
-                  <div className="px-4 py-2 font-bold">Pied</div>
-                  <div className="px-4 py-2">
-                    <input
-                      type="text"
-                      value={userInfo.foot}
-                      onChange={(e) => handleChange("foot", e.target.value)}
-                      className="bg-green-400 px-2 py-1 rounded-md w-full"
-                    />
-                  </div>
-                </div>
+                <InputField
+                  label="Prénom"
+                  value={userInfo.firstName}
+                  onChange={(value) => handleChange("firstName", value)}
+                />
+                <InputField
+                  label="Nom"
+                  value={userInfo.lastName}
+                  onChange={(value) => handleChange("lastName", value)}
+                />
+                <InputField
+                  label="Email"
+                  value={userInfo.email}
+                  onChange={(value) => handleChange("email", value)}
+                />
+                <InputField
+                  label="Genre"
+                  value={userInfo.gender}
+                  onChange={(value) => handleChange("gender", value)}
+                />
+                <InputField
+                  label="Date de naissance "
+                  value={userInfo.birthDate}
+                  onChange={(value) => handleChange("birthDate", value)}
+                />
+                <InputField
+                  label="Taille"
+                  value={userInfo.height}
+                  onChange={(value) => handleChange("height", value)}
+                />
+                <InputField
+                  label="Ville"
+                  value={userInfo.city}
+                  onChange={(value) => handleChange("city", value)}
+                />
+                <InputField
+                  label="Poste"
+                  value={userInfo.position}
+                  onChange={(value) => handleChange("position", value)}
+                />
+                <InputField
+                  label="Pied"
+                  value={userInfo.foot}
+                  onChange={(value) => handleChange("foot", value)}
+                />
+                <InputField
+                  label="Niveau"
+                  value={userInfo.level}
+                  onChange={(value) => handleChange("level", value)}
+                />
+                <InputField
+                  label="Club"
+                  value={userInfo.club}
+                  onChange={(value) => handleChange("club", value)}
+                />
+                <InputField
+                  label="highlight"
+                  value={userInfo.highlight}
+                  onChange={(value) => handleChange("highlight", value)}
+                />
+              </div>
 
-                <div className="grid grid-cols-2 border-b border-white">
-                  <div className="px-4 py-2 font-bold">Niveau</div>
-                  <div className="px-4 py-2">
+              <h3 className="text-lg font-bold text-white mb-2 pl-6">
+                Saisons précédentes
+              </h3>
+              <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-y-8 p-6">
+                {userInfo.seasons.map((season, index) => (
+                  <div key={index} className="bg-gray-800 rounded-md p-4 mr-4">
+                    <h3 className="text-lg font-bold text-white mb-2">{`Saison ${season.season}`}</h3>
                     <input
                       type="text"
-                      value={userInfo.level}
-                      onChange={(e) => handleChange("level", e.target.value)}
-                      className="bg-green-400 px-2 py-1 rounded-md w-full"
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 border-b border-white">
-                  <div className="px-4 py-2 font-bold">Club</div>
-                  <div className="px-4 py-2">
-                    <input
-                      type="text"
-                      value={userInfo.club}
-                      onChange={(e) => handleChange("club", e.target.value)}
-                      className="bg-green-400 px-2 py-1 rounded-md w-full"
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 border-b border-white">
-                  <div className="px-4 py-2 font-bold">Highlight</div>
-                  <div className="px-4 py-2">
-                    <input
-                      type="text"
-                      value={userInfo.highlight}
+                      value={season.club}
                       onChange={(e) =>
-                        handleChange("highlight", e.target.value)
+                        handleChange("club", e.target.value, index)
                       }
-                      className="bg-green-400 px-2 py-1 rounded-md w-full"
+                      placeholder="Nom du club"
+                      className="bg-gray-700 px-2 py-1 rounded-md w-full mb-2"
                     />
                   </div>
-                </div>
+                ))}
               </div>
               {isModified && (
                 <div className="flex justify-center">
                   <button
                     onClick={handleSave}
-                    className="bg-green-500 text-white px-4 py-2 rounded-md mr-2"
+                    className="bg-green-500 text-white px-4 py-2  rounded-md mr-2"
                   >
                     Enregistrer
                   </button>
                   <button
                     onClick={handleCancel}
-                    className="bg-gray-500 text-white px-4 py-2 rounded-md"
+                    className="bg-gray-600 text-white px-4 py-2 rounded-md"
                   >
                     Annuler
                   </button>
